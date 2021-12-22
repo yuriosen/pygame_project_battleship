@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 SPACE_PRESS_COUNT = 0
 
@@ -45,10 +46,15 @@ class Board:
             self.on_click(cell)
 
 
-def draw_1():
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+
+def start_screen():
     screen.fill((0, 0, 0))
     font_1 = pygame.font.Font(None, 50)
-    font_2 = pygame.font.Font(None, 35)
+    font_2 = pygame.font.Font(None, 32)
     rules = ['Морской бой', 'Нажмите "пробел", чтобы начать игру',
              'Игра рассчитана на двух человек, играющих на одном устройстве', 'Первым расставляет корабли PLAYER 1',
              'Чтобы это сделать, нужно нажать на корабль,', 'а затем на клетки поля, куда вы хотите его поместить',
@@ -63,13 +69,12 @@ def draw_1():
         else:
             text = font_2.render(elem, True, (255, 255, 255))
         text_x = width // 2 - text.get_width() // 2
-        text_y = height // y - text.get_height() // y
-        # нужно красиво расположить текст
+        text_y = y
         screen.blit(text, (text_x, text_y))
-        y -= 8
+        y += 50
 
 
-def draw_2():
+def main_screen():
     screen.fill((0, 0, 0))
     font = pygame.font.Font(None, 46)
     letters = 'абвгдежзик'  # 'АБВГДЕЖЗИК'
@@ -84,11 +89,11 @@ def draw_2():
     text = font.render("1  2  3  4  5  6  7  8  9 10", True, (255, 255, 255))
     screen.blit(text, (55, 55))
     screen.blit(text, (450, 55))
-    font_names = pygame.font.SysFont('arial', 50)
-    name_1 = font.render("PLAYER 1", True, (0, 255, 255))
-    name_2 = font.render("PLAYER 2", True, (0, 255, 255))
-    screen.blit(name_1, (55, 10))
-    screen.blit(name_2, (450, 10))
+    font_names = pygame.font.SysFont('arial', 45)
+    name_1 = font_names.render("PLAYER 1", True, (0, 255, 255))
+    name_2 = font_names.render("PLAYER 2", True, (0, 255, 255))
+    screen.blit(name_1, (55, 5))
+    screen.blit(name_2, (450, 5))
 
     board1 = Board(10, 10)
     board1.set_view(45, 85, 35)
@@ -103,14 +108,12 @@ if __name__ == '__main__':
     size = width, height = 800, 600
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Касаева Яна; Цыганова Виктория")
-    draw_1()
-    running = True
-    while running:
+    start_screen()
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                terminate()
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) and SPACE_PRESS_COUNT == 0:
                 SPACE_PRESS_COUNT += 1
-                draw_2()
+                main_screen()
         pygame.display.flip()
-    pygame.quit()
